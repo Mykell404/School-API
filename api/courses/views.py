@@ -173,6 +173,8 @@ class StudentEnrollment(Resource):
         """
             Enroll Students for a Course
         """
+        course = Course.get_by_id(course_id)
+
         data = course_namespace.payload
 
         enrolled_student = Student(
