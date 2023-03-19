@@ -4,9 +4,10 @@ from datetime import timedelta
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
-uri = os.environ.get('DATABASE_URL') # or other relevant config var
+uri = os.environ.get('DATABASE_URL')  # or other relevant config var
 if uri and uri.startswith('postgres://'):
     uri = uri.replace('postgres://', 'postgresql://', 1)
+
 
 class Config:
     SECRET_KEY = config('SECRET_KEY', 'secret')
@@ -14,11 +15,13 @@ class Config:
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=14)
     JWT_SECRET_KEY = config('JWT_SECRET_KEY')
 
+
 class DevConfig(Config):
     DEBUG = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///'+os.path.join(BASE_DIR, 'db.sqlite3')
+
 
 class TestConfig(Config):
     TESTING = True
@@ -26,11 +29,13 @@ class TestConfig(Config):
     SQLALCHEMY_ECHO = True
     SQLALCHEMY_DATABASE_URI = 'sqlite://'
 
+
 class ProdConfig(Config):
     SQLALCHEMY_DATABASE_URI = uri
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     DEBUG = config('DEBUG', False, cast=bool)
-    
+
+
 config_dict = {
     'dev': DevConfig,
     'test': TestConfig,
